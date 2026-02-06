@@ -1,0 +1,39 @@
+== Changelog ==
+
+2025-12-23 - version 1.0.10
+* Fixed an issue when trying to display a parcel point choice for a cart with no selected shipping method
+
+2025-11-28 - version 1.0.9
+* Fixed an issue when computing product prices with a quantity greater than 1
+
+2025-11-25 - version 1.0.8
+* Orders synchronization now use tax excluded prices
+
+2025-11-13 - version 1.0.7
+* Fixed parcel point issues with multiple packages
+* Draft orders are now ignored when synchronizing orders
+
+2025-10-06 - version 1.0.6
+* Fixed parcel point selection in some cases
+
+2025-10-06 - version 1.0.5
+* Fixed parcel point selection in some cases
+
+2025-05-27 - version 1.0.4
+* Fixed compatibility issues when using a mix of legacy and block pages
+* Order synchronization no longer return orders older than 90 days
+
+2025-04-29 - version 1.0.3
+* Fixed compatibility issues with parcel point injection on block checkout
+* Added logs on pricing line save error
+
+2024-12-09 - version 1.0.2
+* Fixed translation issues with woocommerce blocks
+* Replaced mapbox with maplibre
+* Maplibre token is now loaded when opening the parcel point map
+
+2024-12-05 - version 1.0.1
+* Fixed frontoffice translation issues
+
+2024-04-24 - version 1.0.0
+* first stable release
