@@ -33,6 +33,22 @@ class Configuration_Report_Util {
 		$report['plugins']               = self::get_plugins();
 		$report['settings']              = self::get_settings();
 		$report['parcel_points_request'] = self::get_parcel_points_request();
+		$report['shop_uuid']             = Configuration_Util::get_shop_uuid();
+
+		return $report;
+	}
+
+	/**
+	 * Generate a light configuration report.
+	 *
+	 * @return mixed
+	 */
+	public static function get_light_configuration_report() {
+		$report = array();
+
+		$report['plugin_config'] = self::get_plugin_config();
+		$report['versions']      = self::get_versions();
+		$report['shop_uuid']     = Configuration_Util::get_shop_uuid();
 
 		return $report;
 	}
@@ -67,7 +83,7 @@ class Configuration_Report_Util {
 		$versions['php']         = phpversion();
 		$versions['wordpress']   = isset( $wp_version ) ? $wp_version : null;
 		$versions['woocommerce'] = defined( 'WC_VERSION' ) ? WC_VERSION : null;
-		$versions['plugin']      = '1.0.10';
+		$versions['plugin']      = '2.0.0';
 
 		return $versions;
 	}
@@ -96,7 +112,7 @@ class Configuration_Report_Util {
 		foreach ( $plugins as $plugin ) {
 			$result[] = array(
 				'name'    => $plugin['Name'],
-				'version' => $plugin['version'],
+				'version' => $plugin['version']
 			);
 		}
 
@@ -106,13 +122,13 @@ class Configuration_Report_Util {
 	/**
 	 * Get shipping method details
 	 *
-	 * @param WC_Shipping_Method $shipping_method shipping method object.
+	 * @param \WC_Shipping_Method $shipping_method shipping method object.
 	 * @return mixed
 	 */
 	private static function get_shipping_method_details( $shipping_method ) {
 		$class                  = get_class( $shipping_method );
 		$shipping_method_detail = array(
-			'class' => $class,
+			'class' => $class
 		);
 
 		if ( 'WC_Shipping_Flat_Rate' === $class ) {
@@ -146,7 +162,7 @@ class Configuration_Report_Util {
 					'shipping_class'       => $pricing['shipping_class'],
 					'parcel_point_network' => $pricing['parcel_point_network'],
 					'pricing'              => $pricing['pricing'],
-					'flat_rate'            => $pricing['flat_rate'],
+					'flat_rate'            => $pricing['flat_rate']
 				);
 			}
 		}
@@ -170,7 +186,7 @@ class Configuration_Report_Util {
 				$zone_data        = array(
 					'name'             => $zone['zone_name'],
 					'locations'        => $zone['zone_locations'],
-					'shipping-methods' => array(),
+					'shipping-methods' => array()
 				);
 
 				foreach ( $shipping_methods as $shipping_method ) {
@@ -204,7 +220,7 @@ class Configuration_Report_Util {
 			'woocommerce_enable_shipping_calc',
 			'woocommerce_shipping_cost_requires_address',
 			'woocommerce_ship_to_destination',
-			'woocommerce_shipping_debug_mode',
+			'woocommerce_shipping_debug_mode'
 		);
 
 		foreach ( $options as $option ) {
@@ -225,13 +241,13 @@ class Configuration_Report_Util {
 			'street'  => '15 rue marsolier',
 			'city'    => 'PARIS',
 			'zipCode' => '75002',
-			'country' => 'fr',
+			'country' => 'fr'
 		);
 
 		return array(
 			'networks' => $networks,
 			'address'  => $address,
-			'response' => Shipping_Api_Util::get_parcel_points( $address, $networks ),
+			'response' => Shipping_Api_Util::get_parcel_points( $address, $networks )
 		);
 	}
 }

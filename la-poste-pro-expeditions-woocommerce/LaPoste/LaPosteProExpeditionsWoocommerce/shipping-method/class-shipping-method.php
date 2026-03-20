@@ -49,7 +49,7 @@ class Shipping_Method extends \WC_Shipping_Method {
 		$this->method_description = __( 'Lets you define weight/price ranges of your shipping costs for each of your delivery methods and add a parcel point map.', 'la-poste-pro-expeditions-woocommerce' );
 		$this->supports           = array(
 			'shipping-zones',
-			'instance-settings',
+			'instance-settings'
 		);
 		$this->init();
 
@@ -80,11 +80,11 @@ class Shipping_Method extends \WC_Shipping_Method {
 				'description' => __( 'This controls the title which the user sees during checkout.', 'la-poste-pro-expeditions-woocommerce' ),
 				/* translators: 1) platform name */
 				'default'     => sprintf( __( 'Flat rate %s', 'la-poste-pro-expeditions-woocommerce' ), 'La Poste Pro Expéditions' ),
-				'desc_tip'    => true,
+				'desc_tip'    => true
 			),
 			'rates' => array(
-				'type' => 'rates_table',
-			),
+				'type' => 'rates_table'
+			)
 		);
 	}
 
@@ -204,6 +204,7 @@ class Shipping_Method extends \WC_Shipping_Method {
 			'label'   => $this->title,
 			'cost'    => $final_rate,
 			'package' => $package,
+			'taxes'   => ''
 		);
 
 		$this->add_rate( $rate );

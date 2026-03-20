@@ -38,7 +38,7 @@ class Settings_Override {
 	private $shipping_method_settings_override_ignore = array(
 		'boxtal_connect',
 		'la_poste_pro_expeditions_woocommerce',
-		'local_pickup',
+		'local_pickup'
 	);
 
 	/**
@@ -91,7 +91,7 @@ class Settings_Override {
 		// phpcs:ignore WordPress.Security.NonceVerification
 		$current_tab = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ? urldecode( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : '';
 		if ( 'woocommerce_page_wc-settings' === $hook && 'shipping' === $current_tab ) {
-			wp_enqueue_style( 'laposteproexp_notices', $this->plugin_url . 'LaPoste/LaPosteProExpeditionsWoocommerce/assets/css/shipping-method.css', array(), $this->plugin_version );
+			wp_enqueue_style( 'laposteproexp_shipping-method', $this->plugin_url . 'LaPoste/LaPosteProExpeditionsWoocommerce/assets/css/shipping-method.css', array(), $this->plugin_version );
 		}
 	}
 
@@ -130,7 +130,7 @@ class Settings_Override {
 			'type'        => 'multiselect',
 			'description' => $description,
 			'options'     => Misc_Util::get_network_options(),
-			'default'     => array(),
+			'default'     => array()
 		);
 		return $form_fields;
 	}

@@ -18,11 +18,18 @@ use LaPoste\LaPosteProExpeditionsWoocommerce\Shipping_Method\Parcel_Point\Contro
 class Configuration_Util {
 
 	/**
+	 * Configuration key used for shop id
+	 *
+	 * @var string
+	 */
+	private static $shop_uuid_config = 'LAPOSTEPROEXP_SHOP_UUID';
+
+	/**
 	 * List of all configuration keys used by the module
 	 *
-	 * @var mixed
+	 * @var Array<string>
 	 */
-	private static $all_configs = array(
+	private static $all_removable_configs = array(
 		'LAPOSTEPROEXP_ACCESS_KEY',
 		'LAPOSTEPROEXP_SECRET_KEY',
 		'LAPOSTEPROEXP_MAP_BOOTSTRAP_URL',
@@ -43,6 +50,7 @@ class Configuration_Util {
 		'LAPOSTEPROEXP_HELP_SHIPPING_METHOD_URL',
 		'LAPOSTEPROEXP_SHIPPING_RULES_URL',
 		'LAPOSTEPROEXP_LOGGING',
+		'LAPOSTEPROEXP_DELETED_ORDERS'
 	);
 
 	/**
@@ -56,7 +64,7 @@ class Configuration_Util {
 			'acceptLanguage' => get_locale(),
 			'email'          => get_option( 'admin_email' ),
 			'shopUrl'        => get_option( 'siteurl' ),
-			'shopType'       => 'woocommerce',
+			'shopType'       => 'woocommerce'
 		);
 
 		$query = wp_parse_url( $url, PHP_URL_QUERY );
@@ -161,6 +169,33 @@ class Configuration_Util {
 	}
 
 	/**
+	 * Get shop id.
+	 *
+	 * @return string|null shop id.
+	 */
+	public static function get_shop_uuid() {
+		return get_option( self::$shop_uuid_config, null );
+	}
+
+	/**
+	 * Get deleted orders id.
+	 *
+	 * @return array deleted orders id.
+	 */
+	public static function get_deleted_orders() {
+		return json_decode( get_option( 'LAPOSTEPROEXP_DELETED_ORDERS', '[]' ), true );
+	}
+
+	/**
+	 * Set deleted orders id.
+	 *
+	 * @param array $order_ids deleted orders id.
+	 */
+	public static function set_deleted_orders( $order_ids ) {
+		return update_option( 'LAPOSTEPROEXP_DELETED_ORDERS', wp_json_encode( $order_ids ) );
+	}
+
+	/**
 	 * Get all configurations.
 	 *
 	 * @return array
@@ -168,9 +203,11 @@ class Configuration_Util {
 	public static function get_all_configs() {
 		$configs = array();
 
-		foreach ( self::$all_configs as $config ) {
+		foreach ( self::$all_removable_configs as $config ) {
 			$configs[ $config ] = get_option( $config );
 		}
+
+		$configs[ self::$shop_uuid_config ] = self::get_shop_uuid();
 
 		return $configs;
 	}
@@ -192,7 +229,7 @@ class Configuration_Util {
 	public static function delete_configuration() {
 		global $wpdb;
 
-		foreach ( self::$all_configs as $config ) {
+		foreach ( self::$all_removable_configs as $config ) {
 			delete_option( $config );
 		}
 		$wpdb->query(
@@ -212,7 +249,8 @@ class Configuration_Util {
 	public static function parse_configuration( $body ) {
 		return self::parse_parcel_point_networks( $body )
 			&& self::parse_map_configuration( $body )
-			&& self::parse_urls_configuration( $body );
+			&& self::parse_urls_configuration( $body )
+			&& self::parse_shop_uuid( $body );
 	}
 
 	/**
@@ -249,7 +287,7 @@ class Configuration_Util {
 						Notice_Controller::$custom,
 						array(
 							'status'  => 'warning',
-							'message' => __( 'There\'s been a change in the parcel point network list, we\'ve adapted your shipping method configuration. Please check that everything is in order.', 'la-poste-pro-expeditions-woocommerce' ),
+							'message' => __( 'There\'s been a change in the parcel point network list, we\'ve adapted your shipping method configuration. Please check that everything is in order.', 'la-poste-pro-expeditions-woocommerce' )
 						)
 					);
 				}
@@ -267,7 +305,7 @@ class Configuration_Util {
 						Notice_Controller::$custom,
 						array(
 							'status'  => 'info',
-							'message' => __( 'There\'s been a change in the parcel point network list, you can add the extra parcel point network(s) to your shipping method configuration.', 'la-poste-pro-expeditions-woocommerce' ),
+							'message' => __( 'There\'s been a change in the parcel point network list, you can add the extra parcel point network(s) to your shipping method configuration.', 'la-poste-pro-expeditions-woocommerce' )
 						)
 					);
 				}
@@ -311,6 +349,19 @@ class Configuration_Util {
 		}
 		if ( is_object( $body ) && property_exists( $body, 'parcelPointNetworkDescriptionUrl' ) ) {
 			update_option( 'LAPOSTEPROEXP_NETWORKS_URL', $body->parcelPointNetworkDescriptionUrl );
+		}
+		return true;
+	}
+
+	/**
+	 * Parse shop id.
+	 *
+	 * @param object $body body.
+	 * @return boolean
+	 */
+	private static function parse_shop_uuid( $body ) {
+		if ( is_object( $body ) && property_exists( $body, 'shopUuid' ) ) {
+			update_option( self::$shop_uuid_config, $body->shopUuid );
 		}
 		return true;
 	}

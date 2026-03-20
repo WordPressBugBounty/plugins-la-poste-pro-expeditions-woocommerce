@@ -16,7 +16,7 @@ $weekday_initials = array(
 	'THURSDAY'  => substr( __( 'THURSDAY', 'la-poste-pro-expeditions-woocommerce' ), 0, 1 ),
 	'FRIDAY'    => substr( __( 'FRIDAY', 'la-poste-pro-expeditions-woocommerce' ), 0, 1 ),
 	'SATURDAY'  => substr( __( 'SATURDAY', 'la-poste-pro-expeditions-woocommerce' ), 0, 1 ),
-	'SUNDAY'    => substr( __( 'SUNDAY', 'la-poste-pro-expeditions-woocommerce' ), 0, 1 ),
+	'SUNDAY'    => substr( __( 'SUNDAY', 'la-poste-pro-expeditions-woocommerce' ), 0, 1 )
 );
 
 $has_opening_hours = is_array( $parcelpoint->opening_hours );

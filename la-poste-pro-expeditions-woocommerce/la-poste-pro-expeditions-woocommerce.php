@@ -6,7 +6,7 @@
  * Author URI: https://app.expeditions-pro.laposte.fr/
  * Text Domain: la-poste-pro-expeditions-woocommerce
  * Domain Path: /LaPoste/LaPosteProExpeditionsWoocommerce/translation
- * Version: 1.0.10
+ * Version: 2.0.0
  * License: GPLv3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * WC requires at least: 2.6.14
@@ -33,6 +33,8 @@ add_action( 'before_woocommerce_init', array( $plugin_instance, 'plugins_before_
 
 add_action( 'plugins_loaded', array( $plugin_instance, 'plugins_loaded_action' ) );
 
+add_action( 'woocommerce_delete_order', array( $plugin_instance, 'deleted_order_action' ) );
+
 add_action( 'wpmu_new_blog', array( $plugin_instance, 'wpmu_new_blog_action' ), 10, 6 );
 
 add_action( 'wpmu_drop_tables', array( $plugin_instance, 'wpmu_drop_tables_action' ) );
@@ -40,4 +42,3 @@ add_action( 'wpmu_drop_tables', array( $plugin_instance, 'wpmu_drop_tables_actio
 register_activation_hook( __FILE__, 'LaPoste\LaPosteProExpeditionsWoocommerce\Plugin::activation_hook' );
 
 register_uninstall_hook( __FILE__, 'LaPoste\LaPosteProExpeditionsWoocommerce\Plugin::uninstall_hook' );
-

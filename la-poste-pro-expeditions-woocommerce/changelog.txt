@@ -1,5 +1,8 @@
 == Changelog ==
 
+2026-03-20 - version 2.0.0
+* Implemented new order synchronization endpoints, which provide more complete information for orders and enable more efficient incremental synchronization
+
 2025-12-23 - version 1.0.10
 * Fixed an issue when trying to display a parcel point choice for a cart with no selected shipping method
 

@@ -26,9 +26,11 @@ use LaPoste\LaPosteProExpeditionsWoocommerce\Util\Shipping_Method_Util;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Util\Database_Util;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Util\Auth_Util;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Util\Logger_Util;
+use LaPoste\LaPosteProExpeditionsWoocommerce\Util\Misc_Util;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Order\Admin_Order_Page;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Order\Front_Order_Page;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Rest_Controller\Order;
+use LaPoste\LaPosteProExpeditionsWoocommerce\Rest_Controller\Order_V2;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Rest_Controller\Shop;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Settings\Page;
 
@@ -60,7 +62,7 @@ class Plugin implements \ArrayAccess {
 		$this['file']            = $file;
 		$this['path']            = realpath( plugin_dir_path( $this['file'] ) ) . DIRECTORY_SEPARATOR;
 		$this['url']             = plugin_dir_url( $this['file'] );
-		$this['version']         = '1.0.10';
+		$this['version']         = '2.0.0';
 		$this['min-wc-version']  = '2.6.14';
 		$this['min-php-version'] = '5.6.0';
 	}
@@ -197,6 +199,8 @@ class Plugin implements \ArrayAccess {
 			if ( $this->can_use_plugin() ) {
 				$order = new Order( $this );
 				$order->run();
+				$orderv2 = new Order_V2( $this );
+				$orderv2->run();
 			}
 		}
 	}
@@ -320,6 +324,21 @@ class Plugin implements \ArrayAccess {
 		$this->register_parcel_point();
 		$this->register_shipping_pethod();
 		$this->register_rest();
+	}
+
+	/**
+	 * Register deleted order action
+	 *
+	 * @param int $order_id removed order id.
+	 * @void
+	 */
+	public function deleted_order_action( $order_id ) {
+		$deleted_orders = Configuration_Util::get_deleted_orders();
+		$deleted_orders = Misc_Util::remove_old_deleted_orders( $deleted_orders );
+
+		$deleted_orders = Misc_Util::add_deleted_order( $deleted_orders, $order_id, new \DateTime() );
+
+		Configuration_Util::set_deleted_orders( $deleted_orders );
 	}
 
 	/**

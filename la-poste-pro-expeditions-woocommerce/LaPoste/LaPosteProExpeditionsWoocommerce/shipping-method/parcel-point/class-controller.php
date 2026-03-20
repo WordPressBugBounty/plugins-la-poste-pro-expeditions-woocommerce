@@ -110,7 +110,9 @@ class Controller {
 			wp_enqueue_script( 'laposteproexp_shipping', $this->plugin_url . 'LaPoste/LaPosteProExpeditionsWoocommerce/assets/js/parcel-point.min.js', array( 'laposteproexp_maplibre_gl', 'laposteproexp_polyfills' ), $this->plugin_version, false );
 			Frontend_Util::inject_inline_data( 'laposteproexp_shipping', 'laposteproexpData', Frontend_Util::get_frontend_data() );
 			wp_localize_script( 'laposteproexp_shipping', 'translations', Frontend_Util::get_map_translations() );
-			wp_set_script_translations( 'laposteproexp_translation', 'la-poste-pro-expeditions-woocommerce' );
+			if ( function_exists( 'wp_set_script_translations' ) ) {
+				wp_set_script_translations( 'laposteproexp_translation', 'la-poste-pro-expeditions-woocommerce' );
+			}
 		}
 	}
 
@@ -194,7 +196,7 @@ class Controller {
 
 		wp_send_json_success(
 			array(
-				'label' => Frontend_Util::get_parcel_point_label( $carrier, $package_key ),
+				'label' => Frontend_Util::get_parcel_point_label( $carrier, $package_key )
 			)
 		);
 	}

@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<br/>
 				<?php
 				if ( null !== $map_setup_url && null !== $networks_url ) {
-					echo sprintf(
+					printf(
 						/* translators: %1$1s: link start %2$2s: link end %3$3s: link start %4$4s: link end*/
 						esc_html__( 'Need some help? Just follow the instructions on %1$show to set-up rules%2$s and learn more about the parcel point networks in %3$sthis article %4$s.', 'la-poste-pro-expeditions-woocommerce' ),
 						'<a href="' . esc_url( $map_setup_url ) . '" target="_blank">',
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						'</a>'
 					);
 				} elseif ( null !== $help_center_url ) {
-					echo sprintf(
+					printf(
 						/* translators: %1$1s: link start %2$2s: link end*/
 						esc_html__( 'Need some help? Just follow the instructions on %1$sthis article%2$s.', 'la-poste-pro-expeditions-woocommerce' ),
 						'<a href="' . esc_url( $help_center_url ) . '" target="_blank">',
@@ -92,7 +92,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$i = 0;
 			foreach ( $pricing_items as $pricing_item ) {
 				include 'html-admin-shipping-method-rate.php';
-				$i++;
+				++$i;
 			}
 		}
 		?>

@@ -101,7 +101,7 @@ class Controller {
 		$data = array(
 			'shippingMethodAjaxNonce' => $this->ajax_nonce,
 			'locale'                  => substr( get_locale(), 0, 2 ),
-			'ajaxurl'                 => admin_url( 'admin-ajax.php' ),
+			'ajaxurl'                 => admin_url( 'admin-ajax.php' )
 		);
 		Frontend_Util::inject_inline_data( 'laposteproexp_shipping_method', 'laposteproexpData', $data );
 	}
@@ -160,7 +160,7 @@ class Controller {
 			'shipping_class'       => array_keys( $shipping_classes ),
 			'parcel_point_network' => array(),
 			'pricing'              => $this::$rate,
-			'flat_rate'            => 0,
+			'flat_rate'            => 0
 		);
 	}
 
@@ -180,7 +180,7 @@ class Controller {
 				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				'SELECT * FROM ' . $table . ' WHERE shipping_method_instance = %s order by pricing_id',
 				array(
-					$method,
+					$method
 				)
 			),
 			ARRAY_A
@@ -229,7 +229,7 @@ class Controller {
 						'shipping_class'           => implode( '|', empty( $pricing_item->{'shipping-class'} ) ? array( 'none' ) : $pricing_item->{'shipping-class'} ),
 						'parcel_point_network'     => ! empty( $pricing_item->{'parcel-point-network'} ) ? implode( '|', $pricing_item->{'parcel-point-network'} ) : null,
 						'pricing'                  => $pricing_item->{'pricing'},
-						'flat_rate'                => self::$rate === $pricing_item->{'pricing'} ? floatval( Misc_Util::convert_comma( $pricing_item->{'flat-rate'} ) ) : null,
+						'flat_rate'                => self::$rate === $pricing_item->{'pricing'} ? floatval( Misc_Util::convert_comma( $pricing_item->{'flat-rate'} ) ) : null
 					),
 					array(
 						'%d',
@@ -241,7 +241,7 @@ class Controller {
 						'%s',
 						'%s',
 						'%s',
-						'%f',
+						'%f'
 					)
 				); // db call ok.
 
@@ -250,7 +250,6 @@ class Controller {
 				}
 			}
 		}
-
 	}
 
 	/**

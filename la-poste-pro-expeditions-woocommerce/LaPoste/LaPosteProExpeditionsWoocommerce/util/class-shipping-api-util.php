@@ -40,7 +40,7 @@ class Shipping_Api_Util {
 		return array(
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 			'Authorization' => base64_encode( Auth_Util::get_access_key() . ':' . Auth_Util::get_secret_key() ),
-			'Content-type'  => 'application/json; charset=UTF-8',
+			'Content-type'  => 'application/json; charset=UTF-8'
 		);
 	}
 
@@ -85,7 +85,7 @@ class Shipping_Api_Util {
 	public static function get_order( $reference ) {
 		$args = array(
 			'method'  => 'GET',
-			'headers' => self::get_request_headers(),
+			'headers' => self::get_request_headers()
 		);
 
 		$response = self::request( 'https://api.expeditions-pro.laposte.fr/v2/shop-order/' . $reference, $args );
@@ -104,7 +104,7 @@ class Shipping_Api_Util {
 		$args = array(
 			'method'  => 'PATCH',
 			'headers' => self::get_request_headers(),
-			'body'    => wp_json_encode( array( 'approve' => $approve ) ),
+			'body'    => wp_json_encode( array( 'approve' => $approve ) )
 		);
 
 		$response = self::request( $path, $args );
@@ -126,8 +126,8 @@ class Shipping_Api_Util {
 			'networks' => $networks,
 			'address'  => array(
 				'zipCode' => $address['zipCode'],
-				'country' => $address['country'],
-			),
+				'country' => $address['country']
+			)
 		);
 		if ( isset( $address['street'] ) ) {
 			$body['address']['street'] = $address['street'];
@@ -143,7 +143,7 @@ class Shipping_Api_Util {
 			$args = array(
 				'method'  => 'POST',
 				'headers' => self::get_request_headers(),
-				'body'    => wp_json_encode( $body ),
+				'body'    => wp_json_encode( $body )
 			);
 
 			$response = self::request( 'https://api.expeditions-pro.laposte.fr/v2/parcel-point', $args );
@@ -169,7 +169,7 @@ class Shipping_Api_Util {
 		$map_token = null;
 		$args      = array(
 			'method'  => 'POST',
-			'headers' => self::get_request_headers(),
+			'headers' => self::get_request_headers()
 		);
 
 		$response = self::request( $path, $args );
@@ -182,5 +182,4 @@ class Shipping_Api_Util {
 
 		return $map_token;
 	}
-
 }

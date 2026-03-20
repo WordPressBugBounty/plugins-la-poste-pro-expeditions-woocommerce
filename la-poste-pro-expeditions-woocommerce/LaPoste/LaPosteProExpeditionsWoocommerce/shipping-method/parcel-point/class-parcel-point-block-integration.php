@@ -35,16 +35,18 @@ class Parcel_Point_Block_Integration implements IntegrationInterface {
 
 		$assets_path = plugins_url( 'la-poste-pro-expeditions-woocommerce/LaPoste/LaPosteProExpeditionsWoocommerce/assets', 'la-poste-pro-expeditions-woocommerce.php' );
 
-		wp_enqueue_script( 'laposteproexp_polyfills', $assets_path . '/js/polyfills.min.js', array(), '1.0.10', false );
-		wp_enqueue_script( 'laposteproexp_maplibre_gl', $assets_path . '/js/maplibre-gl.js', array(), '1.0.10', false );
-		wp_enqueue_script( 'laposteproexp_shipping', $assets_path . '/js/parcel-point.min.js', array( 'jquery-core', 'wp-hooks', 'wp-i18n' ), '1.0.10', false );
-		wp_enqueue_style( 'laposteproexp_maplibre_gl', $assets_path . '/css/maplibre-gl.min.css', array(), '1.0.10' );
-		wp_enqueue_style( 'laposteproexp_parcel_point', $assets_path . '/css/parcel-point.css', array(), '1.0.10' );
+		wp_enqueue_script( 'laposteproexp_polyfills', $assets_path . '/js/polyfills.min.js', array(), '2.0.0', false );
+		wp_enqueue_script( 'laposteproexp_maplibre_gl', $assets_path . '/js/maplibre-gl.js', array(), '2.0.0', false );
+		wp_enqueue_script( 'laposteproexp_shipping', $assets_path . '/js/parcel-point.min.js', array( 'jquery-core', 'wp-hooks', 'wp-i18n' ), '2.0.0', false );
+		wp_enqueue_style( 'laposteproexp_maplibre_gl', $assets_path . '/css/maplibre-gl.min.css', array(), '2.0.0' );
+		wp_enqueue_style( 'laposteproexp_parcel_point', $assets_path . '/css/parcel-point.css', array(), '2.0.0' );
 		wp_localize_script( 'laposteproexp_shipping', 'translations', Frontend_Util::get_map_translations() );
 
 		// Je n'ai pas trouvé de docs de wp_set_script_translations n'utilisant pas les traductions en dur en 3ème paramètre.
 		// Je laisse quand même vu que ça a fonctionné au moins une fois.
-		wp_set_script_translations( 'laposteproexp_translation', 'la-poste-pro-expeditions-woocommerce' );
+		if ( function_exists( 'wp_set_script_translations' ) ) {
+			wp_set_script_translations( 'laposteproexp_translation', 'la-poste-pro-expeditions-woocommerce' );
+		}
 
 		// frontend data injection for legacy scripts.
 		Frontend_Util::inject_inline_data( 'laposteproexp_shipping', 'laposteproexpData', $this->get_script_data() );
@@ -59,7 +61,7 @@ class Parcel_Point_Block_Integration implements IntegrationInterface {
 		return array(
 			'laposteproexp_polyfills',
 			'laposteproexp_maplibre_gl',
-			'laposteproexp_shipping',
+			'laposteproexp_shipping'
 		);
 	}
 

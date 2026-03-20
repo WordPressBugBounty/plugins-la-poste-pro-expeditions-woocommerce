@@ -21,7 +21,7 @@ class Logger_Util {
 	 */
 	private static function get_context() {
 		return array(
-			'source' => 'la-poste-pro-expeditions-woocommerce',
+			'source' => 'la-poste-pro-expeditions-woocommerce'
 		);
 	}
 
@@ -34,7 +34,9 @@ class Logger_Util {
 	 */
 	private static function log( $level, $message ) {
 		if ( Configuration_Util::get_logging() || ! Auth_Util::is_plugin_paired() ) {
-			wc_get_logger()->log( $level, $message, self::get_context() );
+			if ( function_exists( 'wc_get_logger' ) ) {
+				wc_get_logger()->log( $level, $message, self::get_context() );
+			}
 		}
 	}
 

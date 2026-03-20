@@ -13,6 +13,14 @@ namespace LaPoste\LaPosteProExpeditionsWoocommerce\Util;
  * Helper to manage consistency between woocommerce versions product getters and setters.
  */
 class Product_Util {
+
+	/**
+	 * Weight unit.
+	 *
+	 * @var string
+	 */
+	public static $weight_unit = 'kg';
+
 	/**
 	 * Get product weight from product id.
 	 *
@@ -23,13 +31,14 @@ class Product_Util {
 		if ( isset( $product_id ) && ! empty( $product_id ) ) {
 			$product = self::get_product( $product_id );
 			if ( $product->get_weight() && $product->get_weight() !== '' ) {
-				$weight = wc_format_decimal( wc_get_weight( $product->get_weight(), 'kg' ), false );
+				$weight = wc_format_decimal( wc_get_weight( $product->get_weight(), self::$weight_unit ), false );
 			} else {
 				return false;
 			}
 			return $weight;
 		}
 	}
+
 
 	/**
 	 * Get product virtual.
@@ -48,7 +57,7 @@ class Product_Util {
 	/**
 	 * Get product description.
 	 *
-	 * @param WC_Order_Item $item woocommerce order item.
+	 * @param \WC_Order_Item $item woocommerce order item.
 	 * @return string $description
 	 */
 	public static function get_product_description( $item ) {
@@ -85,7 +94,7 @@ class Product_Util {
 	/**
 	 * Get product type. Fix for WC > 3.1.
 	 *
-	 * @param WC_Product_Simple $product woocommerce product.
+	 * @param \WC_Product_Simple $product woocommerce product.
 	 * @return string $product_type
 	 */
 	private static function get_product_type( $product ) {
@@ -115,7 +124,7 @@ class Product_Util {
 	/**
 	 * Get product id.
 	 *
-	 * @param WC_Product_Simple $product woocommerce product.
+	 * @param \WC_Product_Simple $product woocommerce product.
 	 * @return string $id
 	 */
 	public static function get_id( $product ) {
@@ -128,7 +137,7 @@ class Product_Util {
 	/**
 	 * Get product name.
 	 *
-	 * @param WC_Product_Simple $product woocommerce product.
+	 * @param \WC_Product_Simple $product woocommerce product.
 	 * @return string $name
 	 */
 	public static function get_name( $product ) {
@@ -139,9 +148,43 @@ class Product_Util {
 	}
 
 	/**
+	 * Get product sku.
+	 *
+	 * @param integer $product_id woocommerce product id.
+	 * @return string|null product sku
+	 */
+	public static function get_sku( $product_id ) {
+		if ( isset( $product_id ) && ! empty( $product_id ) ) {
+			$product = self::get_product( $product_id );
+			if ( method_exists( $product, 'get_sku' ) ) {
+				return $product->get_sku();
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get product global unique id.
+	 *
+	 * @param integer $product_id woocommerce product id.
+	 * @return string|null product global unique id
+	 */
+	public static function get_global_unique_id( $product_id ) {
+		if ( isset( $product_id ) && ! empty( $product_id ) ) {
+			$product = self::get_product( $product_id );
+			if ( method_exists( $product, 'get_global_unique_id' ) ) {
+				return $product->get_global_unique_id();
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * Is product virtual.
 	 *
-	 * @param WC_Product_Simple $product woocommerce product.
+	 * @param \WC_Product_Simple $product woocommerce product.
 	 * @return boolean is virtual
 	 */
 	public static function is_virtual( $product ) {
@@ -154,7 +197,7 @@ class Product_Util {
 	/**
 	 * Get WC product variation parent id.
 	 *
-	 * @param WC variation $variation woocommerce product variation.
+	 * @param \WC variation $variation woocommerce product variation.
 	 * @return string $id
 	 */
 	public static function get_parent_id( $variation ) {

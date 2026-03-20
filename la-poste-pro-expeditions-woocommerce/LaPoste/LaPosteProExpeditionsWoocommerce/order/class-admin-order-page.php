@@ -67,7 +67,7 @@ class Admin_Order_Page {
 		$controller = new Controller(
 			array(
 				'url'     => $this->plugin_url,
-				'version' => $this->plugin_version,
+				'version' => $this->plugin_version
 			)
 		);
 		add_action( 'admin_enqueue_scripts', array( $controller, 'tracking_styles' ) );
@@ -132,7 +132,7 @@ class Admin_Order_Page {
 		$controller     = new Controller(
 			array(
 				'url'     => $this->plugin_url,
-				'version' => $this->plugin_version,
+				'version' => $this->plugin_version
 			)
 		);
 		$this->tracking = $controller->get_order_tracking( Order_Util::get_id( $order ) );
@@ -155,7 +155,7 @@ class Admin_Order_Page {
 		$controller     = new Controller(
 			array(
 				'url'     => $this->plugin_url,
-				'version' => $this->plugin_version,
+				'version' => $this->plugin_version
 			)
 		);
 		$this->tracking = $controller->get_order_tracking( Order_Util::get_id( Order_Util::admin_get_order() ) );
@@ -213,7 +213,7 @@ class Admin_Order_Page {
 		$controller = new Controller(
 			array(
 				'url'     => $this->plugin_url,
-				'version' => $this->plugin_version,
+				'version' => $this->plugin_version
 			)
 		);
 		$tracking   = $controller->get_order_tracking( $order_details['order_number'] );

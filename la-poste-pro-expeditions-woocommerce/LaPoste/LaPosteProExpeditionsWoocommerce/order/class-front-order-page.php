@@ -62,7 +62,7 @@ class Front_Order_Page {
 		$controller = new Controller(
 			array(
 				'url'     => $this->plugin_url,
-				'version' => $this->plugin_version,
+				'version' => $this->plugin_version
 			)
 		);
 		$controller->tracking_styles();

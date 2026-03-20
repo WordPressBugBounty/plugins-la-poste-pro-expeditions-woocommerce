@@ -65,15 +65,15 @@ class Parcelpoint_Util {
 	/**
 	 * Create a new parcelpoint object
 	 *
-	 * @param integer $network parcel point carrier network id.
-	 * @param integer $code parcel point code.
-	 * @param integer $name parcel point name.
-	 * @param integer $address parcel point address.
-	 * @param integer $zipcode parcel point zip code.
-	 * @param integer $city parcel point city.
-	 * @param integer $country parcel point county.
-	 * @param integer $opening_hours parcel point opening hours.
-	 * @param integer $distance parcel point distance with the shipping address.
+	 * @param string      $network parcel point carrier network id.
+	 * @param string      $code parcel point code.
+	 * @param string|null $name parcel point name.
+	 * @param string|null $address parcel point address.
+	 * @param string|null $zipcode parcel point zip code.
+	 * @param string|null $city parcel point city.
+	 * @param string|null $country parcel point county.
+	 * @param string|null $opening_hours parcel point opening hours.
+	 * @param string|null $distance parcel point distance with the shipping address.
 	 * @return mixed parcelpoint
 	 */
 	public static function create_parcelpoint( $network, $code, $name, $address, $zipcode, $city, $country, $opening_hours, $distance ) {
@@ -215,5 +215,4 @@ class Parcelpoint_Util {
 
 		return $result;
 	}
-
 }

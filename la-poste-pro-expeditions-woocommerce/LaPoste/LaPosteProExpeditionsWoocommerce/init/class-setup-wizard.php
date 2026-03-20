@@ -45,19 +45,17 @@ class Setup_Wizard {
 			if ( ! Auth_Util::is_plugin_paired() && ! Notice_Controller::has_notice( Notice_Controller::$setup_wizard ) ) {
 				Notice_Controller::add_notice( Notice_Controller::$setup_wizard );
 			}
-		} else {
-			if ( Auth_Util::is_plugin_paired() ) {
-				if ( Notice_Controller::has_notice( Notice_Controller::$setup_wizard ) ) {
-					Notice_Controller::remove_notice( Notice_Controller::$setup_wizard );
-				}
-				if ( Configuration_Util::has_configuration() && Notice_Controller::has_notice( Notice_Controller::$configuration_failure ) ) {
-					Notice_Controller::remove_notice( Notice_Controller::$configuration_failure );
-				} elseif ( ! Configuration_Util::has_configuration() && ! Notice_Controller::has_notice( Notice_Controller::$configuration_failure ) ) {
-					Notice_Controller::add_notice( Notice_Controller::$configuration_failure );
-				}
-			} elseif ( Notice_Controller::has_notice( Notice_Controller::$configuration_failure ) ) {
-				Notice_Controller::remove_notice( Notice_Controller::$configuration_failure );
+		} elseif ( Auth_Util::is_plugin_paired() ) {
+			if ( Notice_Controller::has_notice( Notice_Controller::$setup_wizard ) ) {
+				Notice_Controller::remove_notice( Notice_Controller::$setup_wizard );
 			}
+			if ( Configuration_Util::has_configuration() && Notice_Controller::has_notice( Notice_Controller::$configuration_failure ) ) {
+				Notice_Controller::remove_notice( Notice_Controller::$configuration_failure );
+			} elseif ( ! Configuration_Util::has_configuration() && ! Notice_Controller::has_notice( Notice_Controller::$configuration_failure ) ) {
+				Notice_Controller::add_notice( Notice_Controller::$configuration_failure );
+			}
+		} elseif ( Notice_Controller::has_notice( Notice_Controller::$configuration_failure ) ) {
+			Notice_Controller::remove_notice( Notice_Controller::$configuration_failure );
 		}
 	}
 }

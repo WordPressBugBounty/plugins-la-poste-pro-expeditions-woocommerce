@@ -31,14 +31,14 @@ class Order {
 	public function run() {
 		add_action(
 			'rest_api_init',
-			function() {
+			function () {
 				register_rest_route(
 					'la-poste-pro-expeditions-woocommerce/v1',
 					'/order',
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( $this, 'retrieve_orders_handler' ),
-						'permission_callback' => array( $this, 'authenticate' ),
+						'permission_callback' => array( $this, 'authenticate' )
 					)
 				);
 			}
@@ -46,14 +46,14 @@ class Order {
 
 		add_action(
 			'rest_api_init',
-			function() {
+			function () {
 				register_rest_route(
 					'la-poste-pro-expeditions-woocommerce/v1',
 					'/order/(?P<order_id>[\d]+)/shipped',
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( $this, 'order_shipped_handler' ),
-						'permission_callback' => array( $this, 'authenticate' ),
+						'permission_callback' => array( $this, 'authenticate' )
 					)
 				);
 			}
@@ -61,14 +61,14 @@ class Order {
 
 		add_action(
 			'rest_api_init',
-			function() {
+			function () {
 				register_rest_route(
 					'la-poste-pro-expeditions-woocommerce/v1',
 					'/order/(?P<order_id>[\d]+)/delivered',
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( $this, 'order_delivered_handler' ),
-						'permission_callback' => array( $this, 'authenticate' ),
+						'permission_callback' => array( $this, 'authenticate' )
 					)
 				);
 			}
@@ -110,6 +110,8 @@ class Order {
 				'status'       => array_keys( $statuses ),
 				'date_created' => '>' . ( time() - DAY_IN_SECONDS * 90 ),
 				'limit'        => -1,
+				'orderby'      => 'modified',
+				'order'        => 'aSC'
 			)
 		) as $order ) {
 			$recipient = array(
@@ -123,7 +125,7 @@ class Order {
 				'postcode'     => Misc_Util::not_empty_or_null( Order_Util::get_shipping_postcode( $order ) ),
 				'country'      => Misc_Util::not_empty_or_null( Order_Util::get_shipping_country( $order ) ),
 				'phone'        => Misc_Util::not_empty_or_null( Order_Util::get_billing_phone( $order ) ),
-				'email'        => Misc_Util::not_empty_or_null( Order_Util::get_billing_email( $order ) ),
+				'email'        => Misc_Util::not_empty_or_null( Order_Util::get_billing_email( $order ) )
 			);
 			$products  = array();
 			foreach ( $order->get_items( 'line_item' ) as $item ) {
@@ -136,7 +138,7 @@ class Order {
 					$product['quantity']    = (int) $item['qty'];
 					$product['price']       = Order_Util::get_order_item_price_excluding_taxes( $order, $item );
 					$product['description'] = array(
-						$current_language => esc_html( Product_Util::get_product_description( $item ) ),
+						$current_language => esc_html( Product_Util::get_product_description( $item ) )
 					);
 					$products[]             = $product;
 				}
@@ -152,27 +154,44 @@ class Order {
 				'status'            => array(
 					'key'          => $status,
 					'translations' => array(
-						$current_language => isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status,
-					),
+						$current_language => isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status
+					)
 				),
 				'shippingMethod'    => array(
 					'key'          => Order_Item_Shipping_Util::get_method_id( $shipping_method ),
 					'translations' => array(
-						$current_language => Order_Item_Shipping_Util::get_name( $shipping_method ),
-					),
+						$current_language => Order_Item_Shipping_Util::get_name( $shipping_method )
+					)
 				),
 				'shippingAmount'    => Order_Util::get_shipping_total( $order ),
-				'creationDate'      => Order_Util::get_date_created( $order ),
+				'creationDate'      => $this->format_date( Order_Util::get_date_created( $order ) ),
 				'orderAmount'       => Order_Util::get_total_excluding_taxes( $order ),
 				'recipient'         => $recipient,
 				'products'          => $products,
 				'parcelPoint'       => null === $parcelpoint ? null : array(
 					'code'    => $parcelpoint->code,
-					'network' => $parcelpoint->network,
-				),
+					'network' => $parcelpoint->network
+				)
 			);
 		}
 		return array( 'orders' => $result );
+	}
+
+	/**
+	 * Format date into synchronization request format.
+	 *
+	 * @param string|\WC_DateTime|null $date date in string format.
+	 *
+	 * @return string|null
+	 */
+	private function format_date( $date ) {
+		$result = null;
+
+		if ( null !== $date ) {
+			$result = Misc_Util::date_w3c_format( $date );
+		}
+
+		return $result;
 	}
 
 	/**
@@ -214,49 +233,11 @@ class Order {
 		$order_statuses = wc_get_order_statuses();
 
 		if ( 'shipped' === $type ) {
-			$shipped_status = Configuration_Util::get_order_shipped();
-			$order          = wc_get_order( $order_id );
-			if ( false !== $order ) {
-				$note = esc_html__( 'Your order has been shipped.', 'la-poste-pro-expeditions-woocommerce' );
-				$order->add_order_note( $note, false );
-				$order->save();
-
-				/**
-				 * Triggered when an order is shipped using this plugin
-				 *
-				 * @since 1.0.0
-				 */
-				do_action( /* phpcs:ignore WordPress.NamingConventions.ValidHookName */ 'la_poste_pro_expeditions_woocommerce_order_shipped', $order_id );
-
-				if ( null !== $shipped_status && isset( $order_statuses[ $shipped_status ] ) ) {
-					$order->update_status( $shipped_status );
-				} elseif ( null !== $shipped_status ) {
-					update_option( 'LAPOSTEPROEXP_ORDER_SHIPPED', null );
-				}
-			}
+			Order_Util::set_order_as_shipped( $order_id );
 		}
 
 		if ( 'delivered' === $type ) {
-			$delivered_status = Configuration_Util::get_order_delivered();
-			$order            = wc_get_order( $order_id );
-			if ( false !== $order ) {
-				$note = esc_html__( 'Your order has been delivered.', 'la-poste-pro-expeditions-woocommerce' );
-				$order->add_order_note( $note, false );
-				$order->save();
-
-				/**
-				 * Triggered when an order is delivered using this plugin
-				 *
-				 * @since 1.0.0
-				 */
-				do_action( /* phpcs:ignore WordPress.NamingConventions.ValidHookName */ 'la-poste-pro-expeditions-woocommerce_order_delivered', $order_id );
-
-				if ( null !== $delivered_status && isset( $order_statuses[ $delivered_status ] ) ) {
-					$order->update_status( $delivered_status );
-				} elseif ( null !== $delivered_status ) {
-					update_option( 'LAPOSTEPROEXP_ORDER_DELIVERED', null );
-				}
-			}
+			Order_Util::set_order_as_delivered( $order_id );
 		}
 
 		Api_Util::send_api_response( 200 );

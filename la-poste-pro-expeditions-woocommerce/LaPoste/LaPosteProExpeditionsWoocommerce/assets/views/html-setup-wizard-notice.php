@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<h2>
 	<?php
 		/* translators: 1) company name */
-		echo sprintf( esc_html__( 'Welcome to %s!', 'la-poste-pro-expeditions-woocommerce' ), 'La Poste Pro Expéditions' );
+		printf( esc_html__( 'Welcome to %s!', 'la-poste-pro-expeditions-woocommerce' ), 'La Poste Pro Expéditions' );
 	?>
 	</h2>
 	<p><?php esc_html_e( 'The adventure begins in a few clicks', 'la-poste-pro-expeditions-woocommerce' ); ?></p>

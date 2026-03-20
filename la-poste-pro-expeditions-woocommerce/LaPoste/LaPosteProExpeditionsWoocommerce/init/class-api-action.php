@@ -97,5 +97,4 @@ class Api_Action {
 			include dirname( __DIR__ ) . '/assets/views/html-order-tracking.php';
 		}
 	}
-
 }

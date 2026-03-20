@@ -24,10 +24,10 @@ class Frontend_Util {
 			'class'                 => true,
 			'data-branding'         => true,
 			'data-package_key'      => true,
-			'data-shipping_rate_id' => true,
+			'data-shipping_rate_id' => true
 		),
 		'br'    => array(),
-		'small' => array( 'class' => true ),
+		'small' => array( 'class' => true )
 	);
 
 	/**
@@ -108,7 +108,7 @@ class Frontend_Util {
 			'street'  => trim( Customer_Util::get_shipping_address_1( $customer ) . ' ' . Customer_Util::get_shipping_address_2( $customer ) ),
 			'city'    => trim( Customer_Util::get_shipping_city( $customer ) ),
 			'zipCode' => trim( Customer_Util::get_shipping_postcode( $customer ) ),
-			'country' => strtolower( Customer_Util::get_shipping_country( $customer ) ),
+			'country' => strtolower( Customer_Util::get_shipping_country( $customer ) )
 		);
 	}
 
@@ -284,7 +284,7 @@ class Frontend_Util {
 	 * @return boolean   is selected
 	 */
 	public static function is_selected_shipping_method( $rate_id, $package_key ) {
-		$selected_shipping_methods = WC()->session->get( 'chosen_shipping_methods', [] );
+		$selected_shipping_methods = WC()->session->get( 'chosen_shipping_methods', array() );
 		$result                    = false;
 
 		if ( array_key_exists( $package_key, $selected_shipping_methods ) ) {
@@ -307,7 +307,7 @@ class Frontend_Util {
 		$label       = null;
 		$package_key = self::normalize_package_key( $package_key );
 
-		if ( Misc_Util::should_display_parcel_point_link( $shipping_rate_id ) ) {
+		if ( Misc_Util::should_display_parcel_point_link() ) {
 
 			$has_parcel_points = self::init_points( self::get_recipient_address(), $shipping_rate_id, $package_key );
 
@@ -344,7 +344,6 @@ class Frontend_Util {
 	public static function is_checkout_using_woocommerce_blocks() {
 		return class_exists( \Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils::class )
 			&& \Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils::is_checkout_block_default();
-
 	}
 
 	/**
@@ -355,7 +354,6 @@ class Frontend_Util {
 	public static function is_cart_using_woocommerce_blocks() {
 		return class_exists( \Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils::class )
 			&& \Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils::is_cart_block_default();
-
 	}
 
 	/**
@@ -371,7 +369,7 @@ class Frontend_Util {
 			'mapLogoHrefUrl'                   => Configuration_Util::get_map_logo_href_url(),
 			'setPointNonce'                    => wp_create_nonce( self::$set_point_action ),
 			'getPointsNonce'                   => wp_create_nonce( self::$get_points_action ),
-			'getShippingMethodExtraLabelNonce' => wp_create_nonce( self::$get_shipping_method_extra_label_action ),
+			'getShippingMethodExtraLabelNonce' => wp_create_nonce( self::$get_shipping_method_extra_label_action )
 		);
 	}
 
@@ -395,7 +393,7 @@ class Frontend_Util {
 			'THURSDAY'                 => __( 'THURSDAY', 'la-poste-pro-expeditions-woocommerce' ),
 			'FRIDAY'                   => __( 'FRIDAY', 'la-poste-pro-expeditions-woocommerce' ),
 			'SATURDAY'                 => __( 'SATURDAY', 'la-poste-pro-expeditions-woocommerce' ),
-			'SUNDAY'                   => __( 'SUNDAY', 'la-poste-pro-expeditions-woocommerce' ),
+			'SUNDAY'                   => __( 'SUNDAY', 'la-poste-pro-expeditions-woocommerce' )
 		);
 	}
 
@@ -443,5 +441,4 @@ class Frontend_Util {
 	public static function normalize_package_key( $package_key ) {
 		return is_numeric( $package_key ) ? $package_key : 'subscription';
 	}
-
 }

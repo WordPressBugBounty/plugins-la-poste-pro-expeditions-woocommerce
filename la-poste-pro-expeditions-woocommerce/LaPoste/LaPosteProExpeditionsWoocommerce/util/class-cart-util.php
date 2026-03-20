@@ -17,11 +17,11 @@ class Cart_Util {
 	/**
 	 * Get a cart package's weight.
 	 *
-	 * @param mixed $package current package (or full cart)
+	 * @param mixed $package current package (or full cart).
 	 * @return float
 	 */
 	public static function get_weight( $package = null ) {
-		$package = $package === null ? WC()->cart->get_cart() : $package;
+		$package = null === $package ? WC()->cart->get_cart() : $package;
 		$weight  = 0;
 		foreach ( $package as $item ) {
 			if ( $item['data']->needs_shipping() ) {

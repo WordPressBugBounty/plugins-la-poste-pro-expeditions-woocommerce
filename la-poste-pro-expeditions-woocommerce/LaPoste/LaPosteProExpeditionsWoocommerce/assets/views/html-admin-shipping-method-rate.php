@@ -39,7 +39,7 @@ $disabled = Controller::$deactivated === $state;
 		<?php
 		$custom_attributes = array(
 			'multiple'     => 'multiple',
-			'autocomplete' => 'off',
+			'autocomplete' => 'off'
 		);
 		if ( $disabled ) {
 			$custom_attributes['disabled'] = '';
@@ -54,7 +54,7 @@ $disabled = Controller::$deactivated === $state;
 			'options'           => $shipping_classes,
 			'value'             => $selected,
 			'vbvalue'           => $selected,
-			'class'             => 'laposteproexp-tom-select shipping-class',
+			'class'             => 'laposteproexp-tom-select shipping-class'
 		);
 		woocommerce_wp_select( $shipping_classes_field )
 		?>
@@ -65,7 +65,7 @@ $disabled = Controller::$deactivated === $state;
 		<?php
 		$custom_attributes = array(
 			'multiple'     => 'multiple',
-			'autocomplete' => 'off',
+			'autocomplete' => 'off'
 		);
 		if ( $disabled ) {
 			$custom_attributes['disabled'] = '';
@@ -79,7 +79,7 @@ $disabled = Controller::$deactivated === $state;
 			'options'           => $parcel_point_networks,
 			'class'             => 'laposteproexp-tom-select parcel-point-network',
 			'value'             => $selected,
-			'cbvalue'           => $selected,
+			'cbvalue'           => $selected
 		);
 		woocommerce_wp_select( $parcel_point_networks_field )
 		?>

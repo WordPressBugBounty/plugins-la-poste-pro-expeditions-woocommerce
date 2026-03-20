@@ -141,7 +141,7 @@ class Auth_Util {
 
 		return array(
 			'encryptedKey'  => Misc_Util::base64_or_null( self::encrypt_public_key( $key ) ),
-			'encryptedData' => Misc_Util::base64_or_null( self::encrypt_rc4( ( is_array( $body ) ? wp_json_encode( $body ) : $body ), $key ) ),
+			'encryptedData' => Misc_Util::base64_or_null( self::encrypt_rc4( ( is_array( $body ) ? wp_json_encode( $body ) : $body ), $key ) )
 		);
 	}
 

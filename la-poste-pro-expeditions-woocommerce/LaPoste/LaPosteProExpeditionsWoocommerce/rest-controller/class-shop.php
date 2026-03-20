@@ -29,14 +29,14 @@ class Shop {
 	public function run() {
 		add_action(
 			'rest_api_init',
-			function() {
+			function () {
 				register_rest_route(
 					'la-poste-pro-expeditions-woocommerce/v1',
 					'shop/pair',
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( $this, 'pairing_handler' ),
-						'permission_callback' => array( $this, 'authenticate' ),
+						'permission_callback' => array( $this, 'authenticate' )
 					)
 				);
 			}
@@ -44,14 +44,14 @@ class Shop {
 
 		add_action(
 			'rest_api_init',
-			function() {
+			function () {
 				register_rest_route(
 					'la-poste-pro-expeditions-woocommerce/v1',
 					'shop/update-configuration',
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( $this, 'update_configuration_handler' ),
-						'permission_callback' => array( $this, 'authenticate_access_key' ),
+						'permission_callback' => array( $this, 'authenticate_access_key' )
 					)
 				);
 			}
@@ -59,14 +59,14 @@ class Shop {
 
 		add_action(
 			'rest_api_init',
-			function() {
+			function () {
 				register_rest_route(
 					'la-poste-pro-expeditions-woocommerce/v1',
 					'shop/delete-configuration',
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( $this, 'delete_configuration_handler' ),
-						'permission_callback' => array( $this, 'authenticate_access_key' ),
+						'permission_callback' => array( $this, 'authenticate_access_key' )
 					)
 				);
 			}
@@ -74,14 +74,14 @@ class Shop {
 
 		add_action(
 			'rest_api_init',
-			function() {
+			function () {
 				register_rest_route(
 					'la-poste-pro-expeditions-woocommerce/v1',
 					'shop/get-configuration',
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( $this, 'get_configuration_handler' ),
-						'permission_callback' => array( $this, 'authenticate_access_key' ),
+						'permission_callback' => array( $this, 'authenticate_access_key' )
 					)
 				);
 			}
@@ -141,17 +141,15 @@ class Shop {
 				Notice_Controller::remove_notice( Notice_Controller::$setup_wizard );
 				Notice_Controller::add_notice( Notice_Controller::$pairing, array( 'result' => 1 ) );
 				Api_Util::send_api_response( 200, array( 'pluginConfigurationUrl' => $settings_url ) );
-			} else { // pairing update.
-				if ( null !== $callback_url ) {
+			} elseif ( null !== $callback_url ) { // pairing update.
 					Auth_Util::pair_plugin( $access_key, $secret_key );
 					Notice_Controller::remove_notice( Notice_Controller::$pairing );
 					Auth_Util::start_pairing_update( $callback_url );
 					Notice_Controller::add_notice( Notice_Controller::$pairing_update );
 					Api_Util::send_api_response( 200, array( 'pluginConfigurationUrl' => $settings_url ) );
-				} else {
-					Logger_Util::warning( 'Plugin pairing update request denied: missing callback url' );
-					Api_Util::send_api_response( 403 );
-				}
+			} else {
+				Logger_Util::warning( 'Plugin pairing update request denied: missing callback url' );
+				Api_Util::send_api_response( 403 );
 			}
 		} else {
 			Notice_Controller::add_notice( Notice_Controller::$pairing, array( 'result' => 0 ) );

@@ -11,6 +11,7 @@ use LaPoste\LaPosteProExpeditionsWoocommerce\Notice\Notice_Controller;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Util\Misc_Util;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Util\Shipping_Method_Util;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Util\Configuration_Util;
+use LaPoste\LaPosteProExpeditionsWoocommerce\Util\Synchro_Api_Util;
 
 /**
  * Settings page class.
@@ -85,7 +86,7 @@ class Page {
 	private function get_order_status_options() {
 		$status         = wc_get_order_statuses();
 		$status_options = array(
-			'none' => esc_html__( 'No status associated', 'la-poste-pro-expeditions-woocommerce' ),
+			'none' => esc_html__( 'No status associated', 'la-poste-pro-expeditions-woocommerce' )
 		);
 
 		foreach ( $status as $key => $translation ) {
@@ -118,7 +119,7 @@ class Page {
 			array(
 				'type'              => 'string',
 				'default'           => null,
-				'sanitize_callback' => array( $this, 'sanitize_status' ),
+				'sanitize_callback' => array( $this, 'sanitize_status' )
 			)
 		);
 		register_setting(
@@ -127,7 +128,7 @@ class Page {
 			array(
 				'type'              => 'string',
 				'default'           => null,
-				'sanitize_callback' => array( $this, 'sanitize_status' ),
+				'sanitize_callback' => array( $this, 'sanitize_status' )
 			)
 		);
 		register_setting(
@@ -135,7 +136,7 @@ class Page {
 			'LAPOSTEPROEXP_LOGGING',
 			array(
 				'type'    => 'boolean',
-				'default' => false,
+				'default' => false
 			)
 		);
 
@@ -154,7 +155,7 @@ class Page {
 				'value'        => Configuration_Util::get_order_shipped(),
 				'cbvalue'      => Configuration_Util::get_order_shipped(),
 				'label'        => '',
-				'options'      => $status_options,
+				'options'      => $status_options
 			)
 		);
 
@@ -173,7 +174,7 @@ class Page {
 				'value'        => Configuration_Util::get_order_delivered(),
 				'cbvalue'      => Configuration_Util::get_order_delivered(),
 				'label'        => '',
-				'options'      => $status_options,
+				'options'      => $status_options
 			)
 		);
 
@@ -191,7 +192,7 @@ class Page {
 				'value'       => Configuration_Util::get_logging(),
 				'cbvalue'     => '1',
 				'label'       => '',
-				'description' => esc_html__( 'Should remain unchecked by default.', 'la-poste-pro-expeditions-woocommerce' ),
+				'description' => esc_html__( 'Should remain unchecked by default.', 'la-poste-pro-expeditions-woocommerce' )
 			)
 		);
 
@@ -204,7 +205,6 @@ class Page {
 				$this->plugin_tutorial_id
 			);
 		}
-
 	}
 
 	/**
@@ -227,8 +227,8 @@ class Page {
 			array(
 				'a' => array(
 					'href'   => true,
-					'target' => true,
-				),
+					'target' => true
+				)
 			)
 		);
 	}
@@ -241,6 +241,7 @@ class Page {
 	public function render_page() {
 		$plugin_settings_id = $this->plugin_settings_id;
 		$plugin_tutorial_id = $this->plugin_tutorial_id;
+
 		include_once dirname( __DIR__ ) . '/assets/views/html-settings-page.php';
 	}
 

@@ -31,9 +31,9 @@ class Setup_Wizard_Notice extends Abstract_Notice {
 	 */
 	public function __construct( $key ) {
 		parent::__construct( $key );
-		$this->type            = 'setup-wizard';
-		$this->autodestruct    = false;
+		$this->type           = 'setup-wizard';
+		$this->autodestruct   = false;
 		$this->onboarding_url = Configuration_Util::get_onboarding_url();
-		$this->template        = 'html-setup-wizard-notice';
+		$this->template       = 'html-setup-wizard-notice';
 	}
 }

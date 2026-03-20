@@ -118,25 +118,24 @@ class Misc_Util {
 	/**
 	 * Should display parcel point link.
 	 *
-	 * @param int $rate_id woocommmerce shipping rate id.
-	 * @return boolean should display link
+	 * @return boolean
 	 */
-	public static function should_display_parcel_point_link( $rate_id ) {
+	public static function should_display_parcel_point_link() {
 
 		if ( ! WC()->customer->get_shipping_country() || ! WC()->customer->get_shipping_city() ) {
-			Logger_Util::info( 'Cannot display parcel points : missing country and city' );
+			Logger_Util::info( 'Cannot display parcel points: missing country and city' );
 			return false;
 		}
 
 		$countries      = Country_Util::get_activated_countries();
 		$address_fields = $countries->get_address_fields( WC()->customer->get_shipping_country(), 'shipping_' );
 		if ( isset( $address_fields['shipping_state'] ) && $address_fields['shipping_state']['required'] && ! WC()->customer->get_shipping_state() ) {
-			Logger_Util::info( 'Cannot display parcel points : missing state' );
+			Logger_Util::info( 'Cannot display parcel points: missing state' );
 			return false;
 		}
 
 		if ( $address_fields['shipping_postcode']['required'] && ! WC()->customer->get_shipping_postcode() ) {
-			Logger_Util::info( 'Cannot display parcel points : missing post code' );
+			Logger_Util::info( 'Cannot display parcel points: missing post code' );
 			return false;
 		}
 
@@ -201,49 +200,34 @@ class Misc_Util {
 	}
 
 	/**
-	 * Strip encoded double quotes of an array keys.
-	 *
-	 * @param array $array array.
-	 *
-	 * @return array
-	 */
-	public static function array_keys_strip_encoded_double_quotes( $array ) {
-		$new_array = array();
-		foreach ( $array as $key => $value ) {
-			$key               = str_replace( '%22', '', $key );
-			$key               = str_replace( '&quot;', '"', $key );
-			$new_array[ $key ] = $value;
-		}
-		return $new_array;
-	}
-
-	/**
 	 * Strip double quotes of an array keys.
 	 *
-	 * @param array $array array.
+	 * @param array $values array to clean.
 	 *
 	 * @return array
 	 */
-	public static function array_keys_strip_double_quotes( $array ) {
-		$new_array = array();
-		foreach ( $array as $key => $value ) {
-			$key               = str_replace( '%22', '', $key );
-			$key               = str_replace( '&quot;', '', $key );
-			$key               = str_replace( '"', '', $key );
-			$new_array[ $key ] = $value;
+	public static function array_keys_strip_double_quotes( $values ) {
+		$result = array();
+
+		foreach ( $values as $key => $value ) {
+			$key            = str_replace( '%22', '', $key );
+			$key            = str_replace( '&quot;', '', $key );
+			$key            = str_replace( '"', '', $key );
+			$result[ $key ] = $value;
 		}
-		return $new_array;
+
+		return $result;
 	}
 
 	/**
 	 * Compare two values.
 	 *
-	 * @param mixed $a
-	 * @param mixed $b
+	 * @param mixed $a first value.
+	 * @param mixed $b second value.
 	 * @return 1, 0, -1
 	 */
-	public static function compare($a, $b) {
-		return ($a == $b) ? 0 : (($a < $b) ? -1 : 1);
+	public static function compare( $a, $b ) {
+		return ( $a === $b ) ? 0 : ( ( $a < $b ) ? -1 : 1 );
 	}
 
 	/**
@@ -257,7 +241,79 @@ class Misc_Util {
 		foreach ( $networks as $network => $carrier_array ) {
 			$options[ $network ] = implode( ', ', $carrier_array );
 		}
-		uasort($options, 'LaPoste\LaPosteProExpeditionsWoocommerce\Util\Misc_Util::compare');
+		uasort( $options, 'LaPoste\LaPosteProExpeditionsWoocommerce\Util\Misc_Util::compare' );
 		return $options;
+	}
+
+	/**
+	 * Return date with ATOM format (ISO8601 compatible).
+	 *
+	 * @param string|\WC_DateTime|\DateTime $date date to be formatted.
+	 *
+	 * @return string
+	 */
+	public static function date_iso8601_format( $date ) {
+		$date = is_string( $date ) ? new \DateTime( $date ) : $date;
+		return $date->format( \DateTime::ATOM );
+	}
+
+	/**
+	 * Return date with W3C format (ISO8601 compatible).
+	 *
+	 * @param string|\WC_DateTime|\DateTime $date date to be formatted.
+	 *
+	 * @return string
+	 */
+	public static function date_w3c_format( $date ) {
+		$date = is_string( $date ) ? new \DateTime( $date ) : $date;
+		return $date->format( \DateTime::W3C );
+	}
+
+	/**
+	 * Remove deleted orders older than the given amount of days
+	 *
+	 * @param array $deleted_orders deleted orders with deleted date.
+	 *
+	 * @return array
+	 */
+	public static function remove_old_deleted_orders( $deleted_orders ) {
+		$date = new \DateTime();
+		$date->modify( '-30 day' );
+		$date_to_keep = self::date_iso8601_format( $date );
+		$result       = array();
+
+		foreach ( $deleted_orders as $deleted_order ) {
+			$deleted_date = self::date_iso8601_format( $deleted_order['date'] );
+
+			if ( strtotime( $deleted_order['date'] ) >= strtotime( $date_to_keep ) ) {
+				$result[] = $deleted_order;
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Add a new id to deleted orders.
+	 *
+	 * @param array     $deleted_orders deleted orders with deleted date.
+	 * @param int       $order_id order id.
+	 * @param \DateTime $deleted_date order deleted date.
+	 *
+	 * @return array
+	 */
+	public static function add_deleted_order( $deleted_orders, $order_id, $deleted_date ) {
+		$deleted_order    = array(
+			'id'   => $order_id,
+			'date' => self::date_iso8601_format( $deleted_date )
+		);
+		$deleted_orders[] = $deleted_order;
+
+		Logger_Util::info(
+			'Saved deleted order id for synchronization : '
+			. $deleted_order['id'] . ' (' . $deleted_order['date'] . ')'
+		);
+
+		return $deleted_orders;
 	}
 }

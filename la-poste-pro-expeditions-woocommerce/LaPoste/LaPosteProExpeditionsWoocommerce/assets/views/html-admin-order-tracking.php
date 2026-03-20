@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php foreach ( $shipment->parcelsTracking as $parcel ) : ?>
 				<?php if ( null !== $parcel->trackingUrl ) : ?>
 					<?php /* translators: 1) shipment tracking url */ ?>
-					<p><?php echo sprintf( esc_html__( 'Package reference %s', 'la-poste-pro-expeditions-woocommerce' ), '<a href="' . esc_url( $parcel->trackingUrl ) . '" target="_blank">' . esc_html( $parcel->reference ) . '</a>' ); ?></p>
+					<p><?php printf( esc_html__( 'Package reference %s', 'la-poste-pro-expeditions-woocommerce' ), '<a href="' . esc_url( $parcel->trackingUrl ) . '" target="_blank">' . esc_html( $parcel->reference ) . '</a>' ); ?></p>
 				<?php else : ?>
 					<?php /* translators: 1) shipment reference */ ?>
 					<p><?php echo esc_html( sprintf( __( 'Package reference %s', 'la-poste-pro-expeditions-woocommerce' ), $parcel->reference ) ); ?></p>

@@ -55,7 +55,7 @@ class Environment_Check {
 			Notice_Controller::add_notice(
 				Notice_Controller::$environment_warning,
 				array(
-					'message' => $this->environment_warning,
+					'message' => $this->environment_warning
 				)
 			);
 		} elseif ( Notice_Controller::has_notice( Notice_Controller::$environment_warning ) ) {
