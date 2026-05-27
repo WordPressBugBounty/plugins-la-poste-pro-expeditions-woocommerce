@@ -4,7 +4,7 @@ Tags: shipping, delivery, La Poste, Colissimo, Chronopost
 Requires at least: 4.6
 Tested up to: 6.8.3
 Requires PHP: 5.6.0
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -50,18 +50,8 @@ Tools used to compile and minify this plugin's files:
 
 == Changelog ==
 
+2026-05-27 - version 2.0.1
+* Upgraded pairing request
+
 2026-03-20 - version 2.0.0
 * Implemented new order synchronization endpoints, which provide more complete information for orders and enable more efficient incremental synchronization
-
-2025-12-23 - version 1.0.10
-* Fixed an issue when trying to display a parcel point choice for a cart with no selected shipping method
-
-2025-11-28 - version 1.0.9
-* Fixed an issue when computing product prices with a quantity greater than 1
-
-2025-11-25 - version 1.0.8
-* Orders synchronization now use tax excluded prices
-
-2025-11-13 - version 1.0.7
-* Fixed parcel point issues with multiple packages
-* Draft orders are now ignored when synchronizing orders

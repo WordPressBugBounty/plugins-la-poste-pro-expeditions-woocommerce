@@ -51,13 +51,6 @@ class Notice_Controller {
 	 *
 	 * @var string
 	 */
-	public static $pairing_update = 'pairing-update';
-
-	/**
-	 * Notice name.
-	 *
-	 * @var string
-	 */
 	public static $custom = 'custom';
 
 	/**
@@ -297,34 +290,6 @@ class Notice_Controller {
 		$notice_id = sanitize_text_field( wp_unslash( $_REQUEST['notice_id'] ) );
 		self::remove_notice( $notice_id );
 		wp_send_json( true );
-	}
-
-	/**
-	 * Ajax callback. Validate pairing update.
-	 *
-	 * @void
-	 */
-	public function pairing_update_validate_callback() {
-		check_ajax_referer( 'lpfr-eco_woocommerce_notice', 'security' );
-		header( 'Content-Type: application/json; charset=utf-8' );
-		if ( ! isset( $_REQUEST['approve'] ) ) {
-			wp_send_json_error( 'missing input' );
-		}
-		$approve            = sanitize_text_field( wp_unslash( $_REQUEST['approve'] ) );
-		$pairing_update_url = get_option( 'LAPOSTEPROEXP_PAIRING_UPDATE' );
-
-		$updated = Shipping_Api_Util::update_pairing( $pairing_update_url, $approve );
-
-		if ( $updated ) {
-			Auth_Util::end_pairing_update();
-			self::remove_notice( self::$pairing_update );
-			if ( '1' === $approve ) {
-				self::add_notice( self::$pairing, array( 'result' => 1 ) );
-			}
-			wp_send_json( true );
-		} else {
-			wp_send_json_error( 'pairing validation failed' );
-		}
 	}
 
 	/**

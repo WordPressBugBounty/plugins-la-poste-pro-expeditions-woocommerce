@@ -124,31 +124,20 @@ class Shop {
 
 		$access_key   = null;
 		$secret_key   = null;
-		$callback_url = null;
 		$settings_url = admin_url( 'admin.php?page=la-poste-pro-expeditions-woocommerce-settings' );
 		if ( is_object( $body ) && property_exists( $body, 'accessKey' ) && property_exists( $body, 'secretKey' ) ) {
 			$access_key = $body->accessKey;
 			$secret_key = $body->secretKey;
-
-			if ( property_exists( $body, 'pairCallbackUrl' ) ) {
-				$callback_url = $body->pairCallbackUrl;
-			}
 		}
 
 		if ( null !== $access_key && null !== $secret_key ) {
-			if ( ! Auth_Util::is_plugin_paired() ) { // initial pairing.
+			if ( ! Auth_Util::is_plugin_paired() ) {
 				Auth_Util::pair_plugin( $access_key, $secret_key );
 				Notice_Controller::remove_notice( Notice_Controller::$setup_wizard );
 				Notice_Controller::add_notice( Notice_Controller::$pairing, array( 'result' => 1 ) );
 				Api_Util::send_api_response( 200, array( 'pluginConfigurationUrl' => $settings_url ) );
-			} elseif ( null !== $callback_url ) { // pairing update.
-					Auth_Util::pair_plugin( $access_key, $secret_key );
-					Notice_Controller::remove_notice( Notice_Controller::$pairing );
-					Auth_Util::start_pairing_update( $callback_url );
-					Notice_Controller::add_notice( Notice_Controller::$pairing_update );
-					Api_Util::send_api_response( 200, array( 'pluginConfigurationUrl' => $settings_url ) );
 			} else {
-				Logger_Util::warning( 'Plugin pairing update request denied: missing callback url' );
+				Logger_Util::warning( 'Plugin pairing request denied: plugin already paired' );
 				Api_Util::send_api_response( 403 );
 			}
 		} else {

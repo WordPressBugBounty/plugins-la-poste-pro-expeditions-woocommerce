@@ -76,14 +76,14 @@ class Configuration_Report_Util {
 	 *
 	 * @return mixed
 	 */
-	private static function get_versions() {
+	public static function get_versions() {
 		$versions = array();
 		global $wp_version;
 
 		$versions['php']         = phpversion();
 		$versions['wordpress']   = isset( $wp_version ) ? $wp_version : null;
 		$versions['woocommerce'] = defined( 'WC_VERSION' ) ? WC_VERSION : null;
-		$versions['plugin']      = '2.0.0';
+		$versions['plugin']      = '2.0.1';
 
 		return $versions;
 	}
@@ -236,7 +236,8 @@ class Configuration_Report_Util {
 	 * @return mixed
 	 */
 	private static function get_parcel_points_request() {
-		$networks = array_keys( get_object_vars( Configuration_Util::get_parcel_point_networks() ) );
+		$networks = Configuration_Util::get_parcel_point_networks();
+		$networks = null === $networks ? null : array_keys( get_object_vars( $networks ) );
 		$address  = array(
 			'street'  => '15 rue marsolier',
 			'city'    => 'PARIS',

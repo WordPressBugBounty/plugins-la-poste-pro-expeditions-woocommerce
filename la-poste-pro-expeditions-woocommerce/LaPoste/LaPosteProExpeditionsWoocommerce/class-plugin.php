@@ -32,6 +32,7 @@ use LaPoste\LaPosteProExpeditionsWoocommerce\Order\Front_Order_Page;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Rest_Controller\Order;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Rest_Controller\Order_V2;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Rest_Controller\Shop;
+use LaPoste\LaPosteProExpeditionsWoocommerce\Rest_Controller\Shop_V2;
 use LaPoste\LaPosteProExpeditionsWoocommerce\Settings\Page;
 
 /**
@@ -62,7 +63,7 @@ class Plugin implements \ArrayAccess {
 		$this['file']            = $file;
 		$this['path']            = realpath( plugin_dir_path( $this['file'] ) ) . DIRECTORY_SEPARATOR;
 		$this['url']             = plugin_dir_url( $this['file'] );
-		$this['version']         = '2.0.0';
+		$this['version']         = '2.0.1';
 		$this['min-wc-version']  = '2.6.14';
 		$this['min-php-version'] = '5.6.0';
 	}
@@ -195,6 +196,8 @@ class Plugin implements \ArrayAccess {
 		if ( $this->environment_has_no_errors() ) {
 			$shop = new Shop( $this );
 			$shop->run();
+			$shopv2 = new Shop_V2( $this );
+			$shopv2->run();
 
 			if ( $this->can_use_plugin() ) {
 				$order = new Order( $this );
