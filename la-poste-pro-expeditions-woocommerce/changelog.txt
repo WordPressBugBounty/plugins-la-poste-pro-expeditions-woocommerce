@@ -1,5 +1,8 @@
 == Changelog ==
 
+2026-07-07 - version 2.0.2
+* Updated tested versions
+
 2026-05-27 - version 2.0.1
 * Upgraded pairing request
 

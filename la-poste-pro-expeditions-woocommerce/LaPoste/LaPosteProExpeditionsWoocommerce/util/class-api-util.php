@@ -24,7 +24,7 @@ class Api_Util {
 	 * @void
 	 */
 	public static function send_api_response( $code, $body = null ) {
-		header( 'X-Version: 2.0.1' );
+		header( 'X-Version: 2.0.2' );
 		http_response_code( $code );
 		if ( null !== $body ) {
 			echo wp_json_encode( Auth_Util::encrypt_body( $body ) );

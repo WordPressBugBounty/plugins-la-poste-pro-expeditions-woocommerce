@@ -2,9 +2,9 @@
 Contributors: laposteproexpeditions
 Tags: shipping, delivery, La Poste, Colissimo, Chronopost
 Requires at least: 4.6
-Tested up to: 6.8.3
+Tested up to: 7.0
 Requires PHP: 5.6.0
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -49,6 +49,9 @@ Tools used to compile and minify this plugin's files:
 4. Add a parcel point map to your checkout journey
 
 == Changelog ==
+
+2026-07-07 - version 2.0.2
+* Updated tested versions
 
 2026-05-27 - version 2.0.1
 * Upgraded pairing request

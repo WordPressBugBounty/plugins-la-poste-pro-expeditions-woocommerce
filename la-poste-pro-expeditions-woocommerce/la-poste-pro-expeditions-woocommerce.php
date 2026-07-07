@@ -6,11 +6,11 @@
  * Author URI: https://app.expeditions-pro.laposte.fr/
  * Text Domain: la-poste-pro-expeditions-woocommerce
  * Domain Path: /LaPoste/LaPosteProExpeditionsWoocommerce/translation
- * Version: 2.0.1
+ * Version: 2.0.2
  * License: GPLv3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * WC requires at least: 2.6.14
- * WC tested up to: 10.3.4
+ * WC tested up to: 10.9.3
  *
  * @package LaPoste\LaPosteProExpeditionsWoocommerce
  */
